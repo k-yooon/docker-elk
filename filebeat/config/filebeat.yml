@@ -1,0 +1,30 @@
+# input
+filebeat.inputs:
+- type: log
+  paths:
+    - /usr/share/elasticsearch/logs/*
+#  multiline.pattern: ^\[
+
+# config
+filebeat.modules:
+  - module: elasticsearch
+    server:
+      var.paths:
+        - "/usr/share/elasticsearch/logs/*_server.json"
+    slowlog:
+      var.paths:
+        - "/usr/share/elasticsearch/logs/*_index_search_slowlog.json"
+        - "/usr/share/elasticsearch/logs/*_index_indexing_slowlog.json"
+    deprecation:
+      var.paths:
+        - "/usr/share/elasticsearch/logs/*_deprecation.json"
+
+# for kibana dashboard
+setup.kibana:
+  host: "kibana:5601"
+  protocol: "http"
+setup.dashboards.enabled: true
+
+# output
+output.elasticsearch:
+        hosts: ["http://elasticsearch:9200"]
